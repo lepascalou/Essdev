@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EssensMassage</title>
+    <!-- Add Google Fonts CDN for Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', Arial, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background-image: url('images/banner.webp');
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            background-color: #61541d;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #00000073;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h2 .section-title {
+            padding-top: 80px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 6, 6, 0.3);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            padding: 15px 0;
+            transition: background 0.3s, opacity 0.4s, visibility 0.4s;
+            /* border-bottom: 1px solid rgba(160, 134, 96, 0.1); */
+        }
+
+        nav .container {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #A08660;
+            text-decoration: none;
+            justify-self: start;
+        }
+
+        /* Hamburger styles */
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1100;
+            justify-self: end;
+        }
+
+        .nav-toggle span {
+            display: block;
+            width: 28px;
+            height: 1px;
+            margin: 3px 0;
+            background: #ffffff;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            justify-self: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 5px 0;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .nav-links a:hover {
+            color: #A08660;
+            border-bottom: 2px solid #A08660;
+        }
+
+        .nav-links a.active {
+            color: #A08660;
+            /* border-bottom: 2px solid #A08660; */
+        }
+
+        /* Show hamburger and hide nav-links on mobile */
+        @media (max-width: 768px) {
+            .nav-toggle {
+                display: flex;
+            }
+            .nav-links {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                background: rgba(255,255,255,0.98);
+                width: 200px;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+                border-radius: 0 0 10px 10px;
+                overflow: hidden;
+                max-height: 0;
+                opacity: 0;
+                pointer-events: none;
+                transition: max-height 0.3s ease, opacity 0.3s ease; /* <-- Add opacity here */
+                z-index: 1001;
+            }
+            .nav-links.open {
+                max-height: 600px;
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .nav-links li {
+                margin: 0;
+                padding: 18px 24px;
+                border-bottom: 1px solid #eee;
+            }
+            .nav-links a {
+                color: #A08660;
+                font-size: 1.1rem;
+            }
+
+            nav .container {
+                display: grid;
+                grid-template-columns: 1fr auto auto;
+                align-items: center;
+            }
+            .logo {
+                justify-self: start;
+            }
+            .nav-toggle {
+                justify-self: end;
+            }
+            .nav-links {
+                justify-self: center;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 100px 0 50px;
+                justify-content: center; /* Add this line */
+                min-height: 100vh;       /* Ensure it fills the viewport */
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            
+        }
+
+        .hero-content {
+            flex: 1;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: lighter;
+            color: #fafafa;
+            margin-bottom: 40px;
+            line-height: 1.2;
+            letter-spacing: -.05em;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            font-weight: lighter;
+            color: #ffffff;
+            margin-bottom: 30px;
+            font-style: normal;
+            text-align: center;
+        }
+
+        .hero-image {
+            flex: 1;
+            height: 70%;
+            background: url('images/banner.webp') center/cover;
+            border-radius: 20px;
+            margin-left: 40px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(160, 134, 96, 0.3);
+            overflow: hidden;
+        }
+
+        .hero-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(160, 134, 96, 0.05), rgba(196, 168, 130, 0.05));
+        }
+
+        .cta-button {
+            background: #A08660;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            background: #C4A882;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(160, 134, 96, 0.4);
+        }
+
+        /* Sections */
+        section {
+            padding-bottom: 80px;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+        }
+
+        section:not(.hero) {
+            padding-top: 160px;
+            background: rgb(156, 130, 99);
+            backdrop-filter: blur(5px);
+            margin: 0 0;
+            border-radius: 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: #C4A882;
+        }
+
+        /* Services */
+        .services {
+            background: rgb(255, 255, 255);
+            backdrop-filter: blur(0px);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(196, 168, 130, 0.2);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: #C4A882;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            color: #A08660;
+            margin-bottom: 15px;
+        }
+
+        .service-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* About */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-image {
+            height: 400px;
+            background: linear-gradient(45deg, #C4A882, #A08660);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .about-text h3 {
+            font-size: 2rem;
+            color: #A08660;
+            margin-bottom: 20px;
+        }
+
+        .about-text p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Practical Info 
+        .practical-info {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+        }
+*/
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(196, 168, 130, 0.15);
+        }
+
+        .info-card h3 {
+            color: #A08660;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .info-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Contact */
+        .contact-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: #A08660;
+        }
+
+        .contact-form textarea {
+            grid-column: 1 / -1;
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            grid-column: 1 / -1;
+            justify-self: center;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(160, 134, 96, 0.95);
+            backdrop-filter: blur(15px);
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        /* Scroll Arrow */
+        .scroll-arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            left: 50%;
+            bottom: 40px;
+            transform: translateX(-50%);
+            z-index: 10;
+            transition: transform 0.2s;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .scroll-arrow svg {
+            filter: drop-shadow(0 2px 8px rgba(160,134,96,0.10));
+            transition: box-shadow 0.2s;
+        }
+        .scroll-arrow:hover {
+            transform: translateX(-50%) scale(1.08);
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(12px); }
+        }
+        @media (max-width: 768px) {
+            .scroll-arrow {
+                bottom: 20px;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                background: rgba(255,255,255,0.98);
+                width: 200px;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+                border-radius: 0 0 10px 10px;
+                overflow: hidden;
+                max-height: 0;
+                opacity: 0;
+                pointer-events: none;
+                transition: max-height 0.3s ease, opacity 0.3s ease; /* <-- Add opacity here */
+                z-index: 1001;
+            }
+            .nav-links.open {
+                max-height: 600px;
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .nav-links li {
+                margin: 0;
+                padding: 18px 24px;
+                border-bottom: 1px solid #eee;
+            }
+            .nav-links a {
+                color: #A08660;
+                font-size: 1.1rem;
+            }
+
+            nav .container {
+                display: grid;
+                grid-template-columns: 1fr auto auto;
+                align-items: center;
+            }
+            .logo {
+                justify-self: start;
+            }
+            .nav-toggle {
+                justify-self: end;
+            }
+            .nav-links {
+                justify-self: center;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 100px 0 50px;
+                justify-content: center; /* Add this line */
+                min-height: 100vh;       /* Ensure it fills the viewport */
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-image {
+                margin: 30px 0 0 0;
+                height: 300px;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                justify-items: center;
+            }
+            .info-card {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+
+        
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="main-nav" style="display: none;">
+        <div class="container">
+            <!-- Replace text logo with PNG logo -->
+            <a href="#" class="logo" aria-label="EssensMassage">
+                <img src="images/logo3lines.png" alt="EssensMassage Logo" style="height:48px; width:auto; display:block;">
+            </a>
+            <button class="nav-toggle" aria-label="Ouvrir le menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#parcours">Parcours</a></li>
+                <li><a href="#pratique">Infos Pratiques</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    
+    <!-- Hero Section -->
+    <section id="accueil" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>EssensMassage</h1>
+                <p class="subtitle">Toucher d'excellence</p>
+            </div>
+            <!-- White arrow link to next section -->
+            <a href="#services" class="scroll-arrow" aria-label="Aller aux services">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <circle cx="24" cy="24" r="24" fill="rgba(255,255,255,0.85)"/>
+                    <path d="M16 22l8 8 8-8" stroke="#A08660" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title">Massages</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🌿</div>
+                    <h3>Massage Tuina</h3>
+                    <p>Technique traditionnelle chinoise qui harmonise l'énergie vitale. Idéal pour rééquilibrer le corps et l'esprit, soulager les tensions profondes et améliorer la circulation énergétique.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🏃</div>
+                    <h3>Massage Sportif</h3>
+                    <p>Spécialement conçu pour les sportifs et personnes actives. Améliore les performances, accélère la récupération et prévient les blessures grâce à des techniques ciblées.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🧘</div>
+                    <h3>Massage Détente</h3>
+                    <p>Un moment de pure relaxation pour évacuer le stress quotidien. Techniques douces et apaisantes pour retrouver sérénité et équilibre intérieur.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="parcours">
+        <div class="container">
+            <h2 class="section-title">Formations</h2>
+            <div class="about-content">
+                <div class="about-image">
+                    <div>
+                        <p>Votre photo<br>professionnelle</p>
+                    </div>
+                </div>
+                <div class="about-text">
+                    <h3>Une expertise au service de votre bien-être</h3>
+                    <p>Diplômé(e) en massage thérapeutique avec plus de [X] années d'expérience, je me suis spécialisé(e) dans les techniques de massage Tuina, sportif et de détente.</p>
+                    <p>Ma formation en [précisez vos formations] et mon expérience auprès de [type de clientèle] m'ont permis de développer une approche personnalisée, adaptée aux besoins spécifiques de chaque personne.</p>
+                    <p>Mon objectif est de vous accompagner vers un mieux-être durable, en alliant techniques professionnelles et écoute attentive de vos besoins.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Practical Info -->
+    <section id="pratique" class="practical-info">
+        <div class="container">
+            <h2 class="section-title">Informations Pratiques</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>📍 Localisation</h3>
+                    <p>[Votre adresse complète]<br>
+                    Parking disponible<br>
+                    Accessible en transports en commun</p>
+                </div>
+                <div class="info-card">
+                    <h3>🕐 Horaires</h3>
+                    <p>Lundi - Vendredi : 9h00 - 19h00<br>
+                    Samedi : 9h00 - 17h00<br>
+                    Dimanche : Sur rendez-vous<br>
+                    <strong>Sur rendez-vous uniquement</strong></p>
+                </div>
+                <div class="info-card">
+                    <h3>💰 Tarifs</h3>
+                    <p>Massage 60 min : [X]€<br>
+                    Massage 90 min : [X]€<br>
+                    Forfait 3 séances : [X]€<br>
+                    <em>Règlement par chèque ou espèces</em></p>
+                </div>
+                <div class="info-card">
+                    <h3>ℹ️ À savoir</h3>
+                    <p>Première consultation : entretien de 15 min inclus<br>
+                    Annulation : 24h à l'avance<br>
+                    Linge fourni<br>
+                    Espace décontamination et hygiène</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Contact</h2>
+            <div class="contact-content">
+                <form class="contact-form" onsubmit="handleSubmit(event)">
+                    <div class="form-row">
+                        <input type="text" name="nom" placeholder="Votre nom *" required>
+                        <input type="email" name="email" placeholder="Votre email *" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="tel" name="telephone" placeholder="Votre téléphone">
+                        <input type="text" name="sujet" placeholder="Sujet">
+                    </div>
+                    <textarea name="message" placeholder="Votre message *" required></textarea>
+                    <button type="submit" class="cta-button submit-btn">Envoyer le message</button>
+                </form>
+                
+                <div style="margin-top: 40px; text-align: center; padding: 30px; background: rgba(250, 248, 245, 0.9); border-radius: 10px; backdrop-filter: blur(10px);">
+                    <h3 style="color: #A08660; margin-bottom: 20px;">Coordonnées directes</h3>
+                    <p><strong>Téléphone :</strong> [Votre numéro]</p>
+                    <p><strong>Email :</strong> [Votre email]</p>
+                    <p><strong>Adresse :</strong> [Votre adresse]</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Massage Thérapeutique. Tous droits réservés.</p>
+            <p>SIRET : [Votre SIRET] - Diplômé en massage thérapeutique</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        function smoothScrollTo(target, duration = 1200) { // duration in ms
+            const start = window.scrollY;
+            const end = target.getBoundingClientRect().top + window.scrollY;
+            const change = end - start;
+            const startTime = performance.now();
+
+            function animateScroll(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                window.scrollTo(0, start + change * easeInOutQuad(progress));
+                if (progress < 1) {
+                    requestAnimationFrame(animateScroll);
+                }
+            }
+            function easeInOutQuad(t) {
+                return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+            }
+            requestAnimationFrame(animateScroll);
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    smoothScrollTo(target, 1200); // Change 1200 for slower/faster scroll (ms)
+                }
+            });
+        });
+
+        // Form submission
+        function handleSubmit(event) {
+            event.preventDefault();
+            alert('Merci pour votre message ! Je vous recontacterai dans les plus brefs délais.');
+            event.target.reset();
+        }
+
+        // Show/hide navbar on scroll
+        const nav = document.getElementById('main-nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 0) {
+                nav.style.display = 'block';
+            } else {
+                nav.style.display = 'none';
+            }
+        });
+        // Hide navbar on page load if at top
+        if (window.scrollY === 0) {
+            nav.style.display = 'none';
+        }
+
+        // Responsive navbar toggle
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+        });
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                navLinks.classList.remove('open');
+            }
+        });
+
+        // Close mobile navbar after clicking a link
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            navLinks.classList.remove('open');
+        }
+    });
+});
+
+// Highlight current section in navbar
+const sections = document.querySelectorAll('section[id]');
+const navLinksAll = document.querySelectorAll('.nav-links a');
+
+function highlightNav() {
+    let scrollPos = window.scrollY || window.pageYOffset;
+    let offset = nav.offsetHeight || 0;
+
+    sections.forEach(section => {
+        const top = section.offsetTop - offset - 10;
+        const bottom = top + section.offsetHeight;
+        const id = section.getAttribute('id');
+        if (scrollPos >= top && scrollPos < bottom) {
+            navLinksAll.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+            });
+        }
+    });
+}
+
+window.addEventListener('scroll', highlightNav);
+window.addEventListener('resize', highlightNav);
+window.addEventListener('DOMContentLoaded', highlightNav);
+    </script>
+</body>
+</html>
