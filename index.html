@@ -393,7 +393,7 @@
         }
 
         .about-text p {
-            color: #666;
+            color: #f7f7f7;
             margin-bottom: 20px;
             line-height: 1.7;
         }
@@ -476,11 +476,11 @@
 
         /* Footer */
         footer {
-            background: rgba(160, 134, 96, 0.95);
+            background: #4b4a4ac7;
             backdrop-filter: blur(15px);
             color: white;
             text-align: center;
-            padding: 40px 0;
+            padding: 20px 0;
         }
 
         /* Scroll Arrow */
@@ -629,6 +629,17 @@
         border: 1px solid #eee;
     }
 }
+
+@media (min-width: 769px) and (max-width: 1200px) {
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .services-grid .service-card:last-child {
+        grid-column: 1 / -1;
+        justify-self: center;
+        max-width: 400px;
+    }
+}
     </style>
 </head>
 <body>
@@ -675,7 +686,7 @@
     <!-- Services -->
     <section id="services" class="services">
         <div class="container">
-            <h2 class="section-title">Massages</h2>
+            <h2 class="section-title">Prestations</h2>
             <div class="services-grid">
                 <div class="service-card">
                     <div class="service-icon">🌿</div>
@@ -699,7 +710,7 @@
     <!-- About -->
     <section id="parcours">
         <div class="container">
-            <h2 class="section-title">Formations</h2>
+            <h2 class="section-title">Mon parcours</h2>
             <div class="about-content">
                 <div class="about-image">
                     <div>
@@ -783,8 +794,8 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2025 Massage Thérapeutique. Tous droits réservés.</p>
-            <p>SIRET : [Votre SIRET] - Diplômé en massage thérapeutique</p>
+            <p>&copy; 2025 EssensMassage. Tous droits réservés.</p>
+            <p>SIRET : [Votre SIRET] - Diplômé en massage Tuina et EssentialTouch</p>
         </div>
     </footer>
 
